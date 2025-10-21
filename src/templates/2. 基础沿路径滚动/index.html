@@ -107,19 +107,6 @@
       font-size: 14px;
       z-index: 1000;
     }
-
-    /* 添加调试辅助样式 */
-    .debug-info {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-      font-size: 12px;
-      z-index: 1000;
-    }
   </style>
 </head>
 
@@ -162,87 +149,7 @@
     进度: <span id="progress">0</span>%
   </div>
 
-  <!-- 添加调试信息 -->
-  <div class="debug-info">
-    图标位置: <span id="icon-position">-</span>
-  </div>
-
-  <script>
-    gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
-
-    // 确保 DOM 加载完成
-    window.addEventListener('DOMContentLoaded', () => {
-      const icon = document.querySelector('.icon');
-
-      // 设置图标初始位置
-      gsap.set(".icon", {
-        xPercent: -50,
-        yPercent: -50,
-        transformOrigin: "50% 50%"
-      });
-
-      // 创建主时间线
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".content-wrapper",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1,
-          onUpdate: self => {
-            // 更新进度
-            const progress = Math.round(self.progress * 100);
-            document.getElementById('progress').textContent = progress;
-            document.querySelector('.progress-bar-fill').style.width = progress + '%';
-
-            // 更新调试信息
-            const rect = icon.getBoundingClientRect();
-            document.getElementById('icon-position').textContent =
-              `X: ${Math.round(rect.left)}, Y: ${Math.round(rect.top)}`;
-          }
-        }
-      });
-
-      // 路径动画
-      tl.to(".icon", {
-        motionPath: {
-          path: "#motionPath",
-          align: "#motionPath",
-          autoRotate: true,
-          alignOrigin: [0.5, 0.5],
-          useRelative: false
-        },
-        ease: "none",
-        immediateRender: true
-      });
-
-      // 添加缩放动画
-      gsap.to(".icon", {
-        scale: 1.2,
-        duration: 1,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut"
-      });
-
-      // 路径动画时的额外变换
-      tl.to(".icon", {
-        scale: 0.8,
-        duration: 0.3,
-        ease: "power1.inOut"
-      }, 0.2);
-
-      tl.to(".icon", {
-        scale: 1.2,
-        duration: 0.3,
-        ease: "power1.inOut"
-      }, 0.5);
-
-      // 优化性能
-      gsap.set([".icon", ".path-container"], {
-        willChange: "transform"
-      });
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 
 </html>
