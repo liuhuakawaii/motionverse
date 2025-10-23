@@ -25,6 +25,7 @@ window.addEventListener("load", () => {
     let mouseInCanvas = false;
 
     const size = 500
+    // 双缓冲 Ping-Pong 渲染 这是实现流体效果的关键技术,通过在两个渲染目标之间交替渲染来保存和更新状态。
     const pingPongTargets = [
       new THREE.WebGLRenderTarget(size, size, {
         minFilter: THREE.LinearFilter,
@@ -49,6 +50,7 @@ window.addEventListener("load", () => {
     const topTextureSize = new THREE.Vector2(1, 1);
     const bottomTextureSize = new THREE.Vector2(1, 1);
 
+    // 处理鼠标轨迹和流体效果
     const trailsMaterial = new THREE.ShaderMaterial({
       uniforms: {
         uPrevTrails: { value: null },
@@ -61,7 +63,7 @@ window.addEventListener("load", () => {
       vertexShader,
       fragmentShader: fluidFragmentShader,
     })
-
+    // 负责最终图像的混合显示
     const displayMaterial = new THREE.ShaderMaterial({
       uniforms: {
         uFluid: { value: null },
@@ -81,13 +83,13 @@ window.addEventListener("load", () => {
 
     const geometry = new THREE.PlaneGeometry(2, 2);
     const displayMesh = new THREE.Mesh(geometry, displayMaterial);
+    // 
     scene.add(displayMesh);
 
+    // simScene: 用于模拟流体效果
     const simMesh = new THREE.Mesh(geometry, trailsMaterial);
     const simScene = new THREE.Scene();
     simScene.add(simMesh);
-    // trails.position.z = 1; // 将trails平面放在前面
-    // scene.add(trails);
 
     renderer.setRenderTarget(pingPongTargets[0]);
     renderer.clear()
